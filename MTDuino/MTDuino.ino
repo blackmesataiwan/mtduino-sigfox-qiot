@@ -1,25 +1,18 @@
 /*
-    LB-M8Q104A(4-1)(GPS Module) Sample Code for Mighty-Net MTDuino
-
-    Author : Paster @ Mighty-Net @ 2019/02
-    Email : paster@might.com.tw
-    
-    [v]GPS #1 MTK MT3337E
-    [v]MS5607 Barometric Pressure Sensor
-    [v]Si1132 UV Sensor and Light Sensor
-	
-	SERCOM4 A1(UART TX) A2(UART RX)
+    LB-M8Q104A(4-1)(GPS Module) & LB-A8105102A(1-1)(Temperature/Humidity Module) Sample Code for Mighty-Net MTDuino
+    Reference : https://github.com/Mighty-Net/MTDuino
 */
-#include <Arduino.h> // required before wiring_private.h
-#include "wiring_private.h" // pinPeripheral() function
+
+#include <Arduino.h>                        // required before wiring_private.h
+#include "wiring_private.h"                 // pinPeripheral() function
 #include <Wire.h>
 #include "SI1132.h"
 #include "MS5607.h"
-#include "TinyGPS++.h" // You must include the lib : TinyGPSPlus(https://github.com/mikalhart/TinyGPSPlus)
+#include "TinyGPS++.h"                      // You must include the lib : TinyGPSPlus(https://github.com/mikalhart/TinyGPSPlus)
 #include "SI7020.h"
 #include "LIS3DHTR.h"
 
-#define BAUDRATE 115200
+#define BAUDRATE 9600
 #define GPS_MODULE_BM_I2C_ADDR 0x77
 #define GPS_MODULE_UV_I2C_ADDR 0x60
 #define BT_MODULE_HT_I2C_ADDR 0x40
@@ -65,9 +58,9 @@ void SERCOM4_Handler()
 
 void sigfox_atcommand_tx(char *wBuffer)   
 {
-  Serial1.print(wBuffer);                            // Send Data to backend                 
+Serial1.print(wBuffer);                   // Send Data to backend                 
   delay(5000);
-  sigfox_atcommand_rx();                            // Get feedback and show on Terminal function
+  sigfox_atcommand_rx();                  // Get feedback and show on Terminal function
 }
 
 void sigfox_atcommand_rx()
@@ -96,8 +89,8 @@ void setup() {
   Wire.begin();
 
   // UART
-  Serial1.begin(9600);                   // Set sigfox Baudrate:9600bps
-  Serial3.begin(115200);               // Set GPS Baudrate:115200bps
+  Serial1.begin(BAUDRATE);              // Set sigfox Baudrate:9600bps
+  Serial3.begin(BAUDRATE);              // Set GPS Baudrate:9600bps
   SerialUSB.begin(BAUDRATE);
 
   // GPS
@@ -113,7 +106,7 @@ void setup() {
   pinMode(RF_PWEN,OUTPUT);               // Set RF_PWEN pin as output 
   digitalWrite(LED_POW,HIGH);            // Set LED_POW to High
   digitalWrite(RF_PWEN,HIGH);            // Set RF_PWEN to High, and Sigfox module power ON
-  delay(3000);
+  delay(3*1000);
   sigfox_atcommand_tx("AT$O=1,4\r");
   delay(100);
 
@@ -130,7 +123,7 @@ void setup() {
   
   SerialUSB.println("Start");
   
-  delay(10000);
+  delay(10*1000);
 }
 
 char hex_uv[10];
@@ -152,6 +145,7 @@ void loop()
   bm = ms5607.read(GPS_MODULE_BM_I2C_ADDR);
 
   // GPS
+  SERCOM4_Handler();
   if (gps.location.lat() > 0 && gps.location.lng() > 0)
   {
     lat = gps.location.lat();
@@ -164,12 +158,7 @@ void loop()
   // Temperture & Humidity
   ht = si7020.read(BT_MODULE_HT_I2C_ADDR, false);
 
-  /*
-  SerialUSB.println(String((int)uv[2]) + ";" + String((int)bm[1]) + ";" + 
-    String((int)lat*100) + ";" + String((int)lng*100) + ";" +
-    String((int)a3[0]*100) + ";" + String((int)a3[1]*100) + ";" + String((int)a3[2]*100) + ";" + 
-    String(ht[1]*100) + ";" + String(ht[0])*100);
-    */
+  // Debug
   SerialUSB.print("UV : ");
   SerialUSB.println(String((int)uv[2], HEX));
   SerialUSB.print("BM : ");
@@ -197,7 +186,7 @@ void loop()
   
   SerialUSB.println(String("0") + String(hex_uv) + String(hex_bm));
   sigfox_send_data(String("0") + String(hex_uv) + String(hex_bm));
-  delay(30000);
+  delay(30*1000);
   
   // send humidity,trmperture
   SerialUSB.print(F("Send Data to Sigfox : "));
@@ -207,7 +196,7 @@ void loop()
   
   SerialUSB.println(String("1") + String(hex_t) + String(hex_h));
   sigfox_send_data(String("1") + String(hex_t) + String(hex_h) + String("0"));
-  delay(30000);
+  delay(30*1000);
   
   // send lat,lng
   SerialUSB.print(F("Send Data to Sigfox : "));
@@ -217,7 +206,7 @@ void loop()
   
   SerialUSB.println(String("2") + String(hex_lat) + String(hex_lng));
   sigfox_send_data(String("2") + String(hex_lat) + String(hex_lng));
-  delay(30000);
+  delay(30*1000);
   
   // send MEMS
   SerialUSB.print(F("Send Data to Sigfox : "));
@@ -228,9 +217,8 @@ void loop()
   
   SerialUSB.println(String("3") + String(hex_ax) + String(hex_ay) + String(hex_az));
   sigfox_send_data(String("3") + String(hex_ax) + String(hex_ay) + String(hex_az));
-  delay(30000);
+  delay(30*1000);
   
-  //sigfox_send_data(String((int)uv[2], HEX) + "," + String((int)bm[1], HEX) + "," + String((int)ht[1]*100, HEX) + "," + String((int)ht[0]*100, HEX));     // Send Data to backend function
   
-  delay(60000*10);
+  delay(10*60*1000);
 }
