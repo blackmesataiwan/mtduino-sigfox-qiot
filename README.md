@@ -28,7 +28,7 @@ MTDuino前期設定及開通請參考此篇文章 : [**MTDuino—專門替 Sigfo
 
 ## MTDuino燒錄
 範例檔案 : [**[MTDuino.ino]**](./MTDuino/MTDuino.ino)
-開發版請選擇 **"Arduino M0 Pro (Native USB Port)"**並進行燒錄
+開發版請選擇 **"Arduino M0 Pro (Native USB Port)"** 並進行燒錄
 ![](assets/2fQRCHA.png)
 ![](assets/Hc27YYT.png)
 
