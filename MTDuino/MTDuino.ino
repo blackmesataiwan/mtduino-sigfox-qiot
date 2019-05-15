@@ -96,7 +96,7 @@ void setup() {
   // GPS
   SerialUSB.println(F("Init GPS Module...."));
   pinMode(PIN_GPS_POWER, OUTPUT);
-  digitalWrite(PIN_GPS_POWER, HIGH);
+  digitalWrite(PIN_GPS_POWER, LOW);
   pinPeripheral(PIN_GPS_TX, PIO_SERCOM_ALT);
   pinPeripheral(PIN_GPS_RX, PIO_SERCOM_ALT);
 
@@ -145,7 +145,6 @@ void loop()
   bm = ms5607.read(GPS_MODULE_BM_I2C_ADDR);
 
   // GPS
-  SERCOM4_Handler();
   if (gps.location.lat() > 0 && gps.location.lng() > 0)
   {
     lat = gps.location.lat();
