@@ -16,6 +16,8 @@
 
    Interface :
    I2C
+
+   Amend : Tim Hsu @ QNAP @ 201905016
 */
 #ifndef HEADER_SI7020
 #define HEADER_SI7020
@@ -26,6 +28,7 @@ class SI7020 {
     void init( int Addr );
     float* read( int Addr, bool isFahrenheit );
   private:
+    float *result;
 };
 
 #endif

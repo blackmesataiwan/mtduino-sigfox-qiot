@@ -16,6 +16,8 @@
 
    Interface :
    I2C
+
+   Amend : Tim Hsu @ QNAP @ 201905016
 */
 #ifndef HEADER_LIS3DHTR
 #define HEADER_LIS3DHTR
@@ -26,6 +28,7 @@ class LIS3DHTR {
     void init( int Addr );
     float* read( int Addr );
   private:
+    float *result;
 };
 
 #endif

@@ -16,6 +16,8 @@
 
    Interface :
    I2C
+
+   Amend : Tim Hsu @ QNAP @ 201905016
 */
 #include "SI1132.h"
 #include "Arduino.h"
@@ -26,6 +28,7 @@ void SI1132::begin( void ) {
 }
 
 void SI1132::init( int Addr ) {
+  result = (float *)malloc(3 * sizeof(float));
   int response = 0;
   // Enable UVindex measurement coefficients
   // Start I2C Transmission
@@ -326,7 +329,6 @@ void SI1132::init( int Addr ) {
 }
 
 float* SI1132::read( int Addr ) {
-  float* result = (float*) malloc(3 * sizeof(float));
   unsigned int data[4];
 
   // Start I2C Transmission

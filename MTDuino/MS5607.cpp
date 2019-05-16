@@ -13,6 +13,8 @@
 
    Interface :
    I2C
+
+   Amend : Tim Hsu @ QNAP @ 201905016
 */
 #include "MS5607.h"
 #include "Arduino.h"
@@ -23,6 +25,7 @@ void MS5607::begin( void ) {
 }
 
 void MS5607::init( int Addr ) {
+  result = (double *)malloc(2 * sizeof(double));
   Wire.beginTransmission(Addr);
   Wire.write(MS5607_CMD_RESET);
   Wire.endTransmission();
@@ -46,7 +49,6 @@ void MS5607::init( int Addr ) {
 }
 
 double* MS5607::read( int Addr ) {
-  double* result = (double*) malloc(2 * sizeof(double));
 
   unsigned long D1 = 0, D2 = 0;
 

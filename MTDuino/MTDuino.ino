@@ -14,6 +14,10 @@
 
 #include "Timer.h"
 
+/*
+#include <MemoryFree.h>
+*/
+
 #define BAUDRATE 9600
 #define GPS_MODULE_BM_I2C_ADDR 0x77
 #define GPS_MODULE_UV_I2C_ADDR 0x60
@@ -103,25 +107,31 @@ void debug()
 {
   SerialUSB.println(F("Debug info : "));
   SerialUSB.println(F("====================="));
-
+  
+  //Memory check
+  /*
+  SerialUSB.print(F("Free Ram : "));
+  SerialUSB.println(freeMemory(), DEC);
+  */
+  
   // Debug
-  SerialUSB.print("UV : ");
+  SerialUSB.print(F("UV : "));
   SerialUSB.println(String((int)uv[2], HEX));
-  SerialUSB.print("BM : ");
+  SerialUSB.print(F("BM : "));
   SerialUSB.println(String((int)bm[1], HEX));
-  SerialUSB.print("GPS_LAT : ");
+  SerialUSB.print(F("GPS_LAT : "));
   SerialUSB.println(String((int)(lat * 100), HEX));
-  SerialUSB.print("GPS_LNG : ");
+  SerialUSB.print(F("GPS_LNG : "));
   SerialUSB.println(String((int)(lng * 100), HEX));
-  SerialUSB.print("MEMS_X : ");
+  SerialUSB.print(F("MEMS_X : "));
   SerialUSB.println(String((int)a3[0], HEX));
-  SerialUSB.print("MEMS_Y : ");
+  SerialUSB.print(F("MEMS_Y : "));
   SerialUSB.println(String((int)a3[1], HEX));
-  SerialUSB.print("MEMS_Z : ");
+  SerialUSB.print(F("MEMS_Z : "));
   SerialUSB.println(String((int)a3[2], HEX));
-  SerialUSB.print("T : ");
+  SerialUSB.print(F("T : "));
   SerialUSB.println(String((int)(ht[1] * 100), HEX));
-  SerialUSB.print("H : ");
+  SerialUSB.print(F("H : "));
   SerialUSB.println(String((int)(ht[0] * 100), HEX));
 
   SerialUSB.println(F("====================="));
@@ -216,11 +226,11 @@ void setup()
   lis3dhtr.begin(); // 3A-MEMS
   lis3dhtr.init(BT_MODULE_3A_I2C_ADDR);
 
-  SerialUSB.println("Start");
+  SerialUSB.println(F("Start"));
 
   All_timer.after(1000, send);           // power on then send once
   All_timer.every(10 * 60 * 1000, send); // every 10 minute when call send function
-  debug_timer.every(1000, debug);
+  debug_timer.every(2000, debug);
   delay(10 * 1000);
 }
 

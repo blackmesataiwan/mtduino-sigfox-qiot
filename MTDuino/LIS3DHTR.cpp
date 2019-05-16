@@ -16,6 +16,8 @@
 
    Interface :
    I2C
+
+   Amend : Tim Hsu @ QNAP @ 201905016
 */
 #include "LIS3DHTR.h"
 #include "Arduino.h"
@@ -26,6 +28,7 @@ void LIS3DHTR::begin( void ) {
 }
 
 void LIS3DHTR::init( int Addr ) {
+  result = (float *)malloc(3 * sizeof(float));
   // Start I2C Transmission
   Wire.beginTransmission(Addr);
   // Select control register 1
@@ -47,7 +50,6 @@ void LIS3DHTR::init( int Addr ) {
 }
 
 float* LIS3DHTR::read( int Addr ) {
-  float* result = (float*) malloc(3 * sizeof(float));
   unsigned int data[6];
   for (int i = 0; i < 6; i++)
   {

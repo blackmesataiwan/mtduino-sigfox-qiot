@@ -16,6 +16,8 @@
 
    Interface :
    I2C
+
+   Amend : Tim Hsu @ QNAP @ 201905016
 */
 #include "SI7020.h"
 #include "Arduino.h"
@@ -26,6 +28,7 @@ void SI7020::begin( void ) {
 }
 
 void SI7020::init( int Addr ) {
+  result = (float *)malloc(2 * sizeof(float));
   // Start I2C transmission
   Wire.beginTransmission(Addr);
   // Stop I2C transmission
@@ -34,7 +37,6 @@ void SI7020::init( int Addr ) {
 }
 
 float* SI7020::read( int Addr, bool isFahrenheit ) {
-  float* result = (float*) malloc(2 * sizeof(float));
   unsigned int data[2];
 
   // Start I2C transmission

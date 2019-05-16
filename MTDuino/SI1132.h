@@ -16,6 +16,8 @@
 
    Interface :
    I2C
+
+   Amend : Tim Hsu @ QNAP @ 201905016
 */
 #ifndef HEADER_SI1132
 #define HEADER_SI1132
@@ -26,6 +28,7 @@ class SI1132 {
     void init( int Addr );
     float* read( int Addr );
   private:
+    float *result;
 };
 
 #endif

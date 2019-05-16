@@ -13,6 +13,8 @@
 
    Interface :
    I2C
+
+   Amend : Tim Hsu @ QNAP @ 201905016
 */
 
 #define MS5607_CMD_RESET	0x1E    // perform reset
@@ -40,6 +42,7 @@ class MS5607 {
     unsigned int C[8];
     double P;
     double TEMP;
+    double *result;
 };
 
 #endif
